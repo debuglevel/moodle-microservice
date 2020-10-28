@@ -1,0 +1,45 @@
+version: "3.1"
+
+services:
+  db:
+    build: ./MariaDB
+    image: moodle39-mariadb
+    volumes:
+      - moodle39-mariadb:/initialized-db
+    ports:
+      - 3306:3306
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:5.0.2
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: root
+    ports:
+      - 8081:80
+
+  web:
+    build: ./Moodle39
+    image: moodle39-web
+    volumes:
+      - moodle39-moodledata:/var/www/moodledata
+      - moodle39-moodlewww:/var/www/html/moodle/
+    depends_on:
+      - db
+    ports:
+      - 8082:80
+
+  mailhog:
+    image: mailhog/mailhog
+    #command: ["-storage=maildir", "-maildir-path=/maildir"]
+    #user: root
+    #volumes:
+    #  - ./volumes/mailhog/volume:/maildir
+    ports:
+      - 2025:1025
+      - 8083:8025
+
+volumes:
+  moodle39-mariadb:
+  moodle39-moodledata:
+  moodle39-moodlewww:
