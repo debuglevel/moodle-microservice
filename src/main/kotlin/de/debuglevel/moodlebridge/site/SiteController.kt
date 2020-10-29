@@ -19,12 +19,10 @@ class SiteController(private val siteService: SiteService) {
         logger.debug("Called getAll()")
 
         return try {
-            val site = siteService.get()
-            HttpResponse.ok(site)
-//            val getPersonResponses = persons
-//                .map { GetPersonResponse(it) }
-//
-//            HttpResponse.ok(getPersonResponses)
+            val coreWebserviceGetSiteInfoResponse = siteService.get()
+            val getSiteResponse = GetSiteResponse(coreWebserviceGetSiteInfoResponse)
+
+            HttpResponse.ok(getSiteResponse)
         } catch (e: Exception) {
             logger.error(e) { "Unhandled exception" }
             HttpResponse.serverError("Unhandled exception: ${e.message}")

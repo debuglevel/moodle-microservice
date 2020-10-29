@@ -1,6 +1,6 @@
 package de.debuglevel.moodlebridge.site.client
 
-data class GetSiteResponse(
+data class CoreWebserviceGetSiteInfoResponse(
     val sitename: String,
     val siteurl: String,
     val release: String,

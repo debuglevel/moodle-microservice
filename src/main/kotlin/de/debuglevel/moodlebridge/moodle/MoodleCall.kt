@@ -1,4 +1,4 @@
-package de.debuglevel.moodlebridge.site
+package de.debuglevel.moodlebridge.moodle
 
 open class MoodleCall(
     var wsfunction: String,

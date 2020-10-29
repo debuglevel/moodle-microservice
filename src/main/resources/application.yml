@@ -1,6 +1,7 @@
 app:
   moodlebridge:
     url: http://localhost:8082/moodle/
+    token: 32bc217501ebb9de79ffffbfa13eda81
   security:
     configurable-credential-authentication:
       username: "SECRET_USERNAME"
@@ -35,7 +36,7 @@ micronaut:
 logger:
   levels:
     de.debuglevel: DEBUG
-    io.micronaut.http.client: TRACE
+    #io.micronaut.http.client: TRACE
     io.micronaut.http.server: DEBUG
     io.micronaut.data.query: DEBUG
     # io.micronaut.context.condition: DEBUG # log information about loading conditional beans
