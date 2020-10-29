@@ -2,6 +2,7 @@ package de.debuglevel.moodlebridge.site
 
 import de.debuglevel.moodlebridge.site.client.GetSiteResponse
 import io.micronaut.http.HttpRequest
+import io.micronaut.http.MediaType
 import io.micronaut.http.client.RxHttpClient
 import io.micronaut.http.client.annotation.Client
 import io.micronaut.http.uri.UriBuilder
@@ -12,7 +13,7 @@ import javax.inject.Singleton
 class SiteService(@param:Client("\${app.moodlebridge.url}") private val httpClient: RxHttpClient) {
     private val logger = KotlinLogging.logger {}
 
-    fun callRemote(params: MoodleCall, clazz: Class<GetSiteResponse>): String {
+    private fun callRemote(params: MoodleCall, clazz: Class<*>): Any {
         val uri = UriBuilder.of("/webservice/rest/server.php")
             .toString()
 
@@ -21,21 +22,23 @@ class SiteService(@param:Client("\${app.moodlebridge.url}") private val httpClie
 
         val result = httpClient
             .toBlocking()
-            .retrieve(HttpRequest.POST<Any>(uri, params), String::class.java)
+            .retrieve(
+                HttpRequest.POST<Any>(uri, params)
+                    .contentType(MediaType.APPLICATION_FORM_URLENCODED),
+                clazz
+            )
         return result
     }
 
-    fun get(): Site {
+    fun get(): GetSiteResponse {
         logger.debug { "Getting site..." }
 
         val params = SiteMoodleCall("core_webservice_get_site_info")
-        val result = callRemote(params, GetSiteResponse::class.java)
-
+        val site = callRemote(params, GetSiteResponse::class.java) as GetSiteResponse
 
         logger.debug { "Got site: $site" }
-        return person
+        return site
     }
-
 
     class EntityNotFoundException(criteria: Any) : Exception("Entity '$criteria' does not exist.")
 }

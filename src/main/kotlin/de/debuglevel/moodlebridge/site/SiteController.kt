@@ -20,10 +20,11 @@ class SiteController(private val siteService: SiteService) {
 
         return try {
             val site = siteService.get()
-            val getPersonResponses = persons
-                .map { GetPersonResponse(it) }
-
-            HttpResponse.ok(getPersonResponses)
+            HttpResponse.ok(site)
+//            val getPersonResponses = persons
+//                .map { GetPersonResponse(it) }
+//
+//            HttpResponse.ok(getPersonResponses)
         } catch (e: Exception) {
             logger.error(e) { "Unhandled exception" }
             HttpResponse.serverError("Unhandled exception: ${e.message}")
